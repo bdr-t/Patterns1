@@ -17,8 +17,8 @@ function getFile() {
   });
 }
 
-function readFile(paso1) {
-  paso1.forEach(file => {
+function readFile(files) {
+  files.forEach(file => {
     fs.readFile(path.join(inbox, file), "utf8", (error, data) => {
       if (error) return console.log("Error: File error");
       writeFile(file, data)
@@ -34,6 +34,6 @@ function writeFile(file, data) {
 }
 
 
-let paso1 = getFile()
-readFile(paso1)
+let files = getFile()
+readFile(files)
 
