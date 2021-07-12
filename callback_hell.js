@@ -10,19 +10,15 @@ const reverseText = str =>
     .join("");
 
 
-function getFile() {
-  return fs.readdirSync(inbox, (error, files) => {
-    if (error) return console.log("Error: Folder inaccessible");
-    return files
-  });
-}
+fs.readdir(inbox, async (error, files) => {
+  if (error) return console.log("Error: Folder inaccessible");
+  files.forEach(file => readFile(file))
+});
 
-function readFile(files) {
-  files.forEach(file => {
-    fs.readFile(path.join(inbox, file), "utf8", (error, data) => {
-      if (error) return console.log("Error: File error");
-      writeFile(file, data)
-    });
+function readFile(file) {
+  fs.readFile(path.join(inbox, file), "utf8", (error, data) => {
+    if (error) return console.log("Error: File error");
+    writeFile(file, data)
   });
 }
 
@@ -32,8 +28,3 @@ function writeFile(file, data) {
     console.log(`${file} was successfully saved in the outbox!`);
   });
 }
-
-
-let files = getFile()
-readFile(files)
-
