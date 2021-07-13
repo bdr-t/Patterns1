@@ -1,47 +1,73 @@
-const jugadors = {}
-jugadors['Tony Stark'] = 10
-jugadors['Steve Rogers'] = 9
-jugadors['Carol Denvers'] = 11
 
-const Singleton = (function () {
+class Joc {
+    constructor(jugadors) {
+        this.jugadors = jugadors
+    }
+    incrementPunt(jugador) {
+        this.jugadors[jugador]++
+    }
+    getMarcador() {
+        const marcador = MarcadorSingleton.getInstance(this.jugadors)
+        console.log(marcador.getMarcador())
+    }
+
+}
+
+const MarcadorSingleton = (function () {
     let instance
 
-    function init() {
-        function returnGuanyador() {
-            let max = 0
-            let guanyador
-            for (jugador in jugadors) {
-                if (jugadors[jugador] > max) {
-                    max = jugadors[jugador]
-                    guanyador = jugador
-                }
+    function init(jugadors) {
+        function returnMarcador(){
+            let ordenats = Object.entries(jugadors)
+            ordenats.sort((a, b) => b[1]-a[1])
+
+            let res = ""
+            for (let [i, x] of ordenats.entries()){
+                res += `${i+1}. ${x[0]} amb ${x[1]} punts\n `
             }
-            return `${guanyador} amb ${max} punts`
+            return res
         }
 
         return {
-            getResultat: function () {
-                return returnGuanyador()
+            getMarcador: function () {
+                return returnMarcador()
             }
         }
     }
     return {
-        getInstance: function () {
+        getInstance: function (jugadors) {
             if (!instance) {
-                instance = init()
+                instance = init(jugadors)
             }
             return instance
         }
     }
 })()
 
-const resultat = Singleton.getInstance()
-const a = Singleton.getInstance()
-console.log(resultat.getResultat())
+
+const joc1 = new Joc({
+    'Tony Stark': 10,
+    'Steve Rogers': 9,
+    'Carol Denvers': 10
+}
+)
+joc1.incrementPunt('Carol Denvers')
+joc1.incrementPunt('Carol Denvers')
+joc1.incrementPunt('Carol Denvers')
+joc1.incrementPunt('Steve Rogers')
+joc1.incrementPunt('Tony Stark')
+joc1.getMarcador()
 
 
 
+const joc2 = new Joc({
+    'Thanos': 12,
+    'Ultron': 10,
+    'Loki': 9
+}
+)
+
+joc2.getMarcador()
 
 
-
-
+if(joc1.getMarcador === joc2.getMarcador) console.log(true)
